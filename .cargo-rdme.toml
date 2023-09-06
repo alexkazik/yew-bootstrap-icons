@@ -1,0 +1,9 @@
+readme-path = "README.md"
+line-terminator = "lf"
+heading-base-level = 1
+
+[entrypoint]
+type = "lib"
+
+[intralinks]
+strip-links = true

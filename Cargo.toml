@@ -1,0 +1,16 @@
+[package]
+name = "yew-bootstrap-icons"
+version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+yew = { version = "0.20.0", default-features = false }
+
+[features]
+default = ["std"]
+std = []
+
+[build-dependencies]
+convert_case = { version = "0.6.0", default-features = false }
+anyhow = { version = "1.0.75", default-features = false, features = ["std"] }
