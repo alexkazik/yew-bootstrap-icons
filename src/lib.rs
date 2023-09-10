@@ -131,6 +131,8 @@ use yew::{AttrValue, Html};
 /// It's a transparent wrapper of a `&'static str`, so `Copy` is cheap.
 ///
 /// Use [`BI::html`] or the `From` or `IntoPropValue` implementation to generate the actual html.
+///
+/// Search for an icon at <https://icons.getbootstrap.com/#search>.
 // Invariant: All possible strings are different and thus `(ptr,len)` must me different as well.
 // Invariant: No two strings at different pointers are equal,
 // Invariant: this is guaranteed due to the fact that it's not possible to create new.
