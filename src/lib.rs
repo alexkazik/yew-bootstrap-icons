@@ -116,13 +116,19 @@
 //!    command_arguments = ["run", "--bin", "copy-bootstrap-icons"]
 //!    ```
 #![forbid(unsafe_code)]
-#![deny(missing_docs)]
+#![forbid(missing_docs)]
 #![warn(clippy::pedantic)]
 
 use core::hash::{Hash, Hasher};
 use yew::html::{ChildrenRenderer, IntoPropValue};
 use yew::virtual_dom::{VNode, VRaw};
 use yew::{AttrValue, Html};
+
+macro_rules! cdn{
+    () => {
+        r#"<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">"#
+    }
+}
 
 /// Represents an bootstrap-icon.
 ///
@@ -133,6 +139,7 @@ use yew::{AttrValue, Html};
 /// Use [`BI::html`] or the `From` or `IntoPropValue` implementation to generate the actual html.
 ///
 /// Search for an icon at <https://icons.getbootstrap.com/#search>.
+#[doc = cdn!()]
 // Invariant: All possible strings are different and thus `(ptr,len)` must me different as well.
 // Invariant: No two strings at different pointers are equal,
 // Invariant: this is guaranteed due to the fact that it's not possible to create new.
@@ -275,9 +282,7 @@ impl BIFiles {
     #[must_use]
     pub const fn cdn() -> VNode {
         VNode::VRaw(VRaw {
-            html: AttrValue::Static(
-                r#"<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">"#,
-            ),
+            html: AttrValue::Static(cdn!()),
         })
     }
 

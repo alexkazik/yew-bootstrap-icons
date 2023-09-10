@@ -23,14 +23,13 @@ fn bootstrap_icons<W: Write>(output: &mut W) -> Result<()> {
                             upper_snake_case.insert(0, '_');
                         }
                         sorted_icons.insert(lower_kebab_case, format!(
-                            "    pub const {upper_snake_case}: BI = BI(\"<i class=\\\"bi bi-{lower_kebab_case}\\\"></i>\");\n"
+                            "    /// Rendered icon: <i class=\"bi bi-{lower_kebab_case}\"></i>\n    pub const {upper_snake_case}: BI = BI(\"<i class=\\\"bi bi-{lower_kebab_case}\\\"></i>\");\n"
                         ));
                     }
                 }
             }
         }
     }
-    output.write_all("#[allow(missing_docs)]\n".as_bytes())?;
     output.write_all("impl BI{\n".as_bytes())?;
     sorted_icons
         .values()
