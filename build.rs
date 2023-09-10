@@ -30,6 +30,7 @@ fn bootstrap_icons<W: Write>(output: &mut W) -> Result<()> {
             }
         }
     }
+    output.write_all("#[allow(missing_docs)]\n".as_bytes())?;
     output.write_all("impl BI{\n".as_bytes())?;
     sorted_icons
         .values()

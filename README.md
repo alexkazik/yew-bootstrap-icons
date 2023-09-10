@@ -24,9 +24,9 @@ html!{
 The files can be added though several ways:
 
 * Copy them yourself from the website
-* Use [`BIFiles::cdn()`]
-* Use [`BIFiles::copy()`] - see below
-* Access the data via [`BIFiles::FILES`] and deliver them yourself
+* Use `BIFiles::cdn()`
+* Use `BIFiles::copy()` - see below
+* Access the data via `BIFiles::FILES` and deliver them yourself
 
 ## Automatically copy the files
 
@@ -44,7 +44,7 @@ There are some options, two are explained below.
    name = "copy-bootstrap-icons"
    ```
 
-## Option 1: Place in dist
+## Option 1: Copy to dist
 
 2. Create the file `src/bin/copy-bootstrap-icons.rs` with:
    ```rust
@@ -77,9 +77,12 @@ There are some options, two are explained below.
    command_arguments = ["run", "--bin", "copy-bootstrap-icons"]
    ```
 
-## Option 2: Place in source and let trunk copy it
+## Option 2: Copy to source (and let trunk copy it to dist)
 
 This means that trunk will add the hash to the css-file.
+
+It is assumed that your directory for static files is called `static`, if not
+change the paths below.
 
 2. Create the file `src/bin/copy-bootstrap-icons.rs` with:
    ```rust

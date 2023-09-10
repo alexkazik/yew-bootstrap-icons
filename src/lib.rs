@@ -24,9 +24,9 @@
 //! The files can be added though several ways:
 //!
 //! * Copy them yourself from the website
-//! * Use [`BIFiles::cdn()`]
-//! * Use [`BIFiles::copy()`] - see below
-//! * Access the data via [`BIFiles::FILES`] and deliver them yourself
+//! * Use [`BIFiles::cdn()`](crate::BIFiles::cdn)
+//! * Use [`BIFiles::copy()`](crate::BIFiles::copy) - see below
+//! * Access the data via [`BIFiles::FILES`](crate::BIFiles::FILES) and deliver them yourself
 //!
 //! # Automatically copy the files
 //!
@@ -44,7 +44,7 @@
 //!    name = "copy-bootstrap-icons"
 //!    ```
 //!
-//! # Option 1: Place in dist
+//! # Option 1: Copy to dist
 //!
 //! 2. Create the file `src/bin/copy-bootstrap-icons.rs` with:
 //!    ```no_run
@@ -77,9 +77,12 @@
 //!    command_arguments = ["run", "--bin", "copy-bootstrap-icons"]
 //!    ```
 //!
-//! # Option 2: Place in source and let trunk copy it
+//! # Option 2: Copy to source (and let trunk copy it to dist)
 //!
 //! This means that trunk will add the hash to the css-file.
+//!
+//! It is assumed that your directory for static files is called `static`, if not
+//! change the paths below.
 //!
 //! 2. Create the file `src/bin/copy-bootstrap-icons.rs` with:
 //!    ```no_run
@@ -113,6 +116,7 @@
 //!    command_arguments = ["run", "--bin", "copy-bootstrap-icons"]
 //!    ```
 #![forbid(unsafe_code)]
+#![deny(missing_docs)]
 #![warn(clippy::pedantic)]
 
 use core::hash::{Hash, Hasher};
@@ -127,7 +131,7 @@ use yew::{html, AttrValue, Html};
 /// It's a transparent wrapper of a `&'static str`, so `Copy` is cheap.
 ///
 /// Use [`BI::html`] or the `From` or `IntoPropValue` implementation to generate the actual html.
-// Invariant: All possible strings are different and thus (ptr,len) must me different as well.
+// Invariant: All possible strings are different and thus `(ptr,len)` must me different as well.
 // Invariant: No two strings at different pointers are equal,
 // Invariant: this is guaranteed due to the fact that it's not possible to create new.
 #[derive(Clone, Copy, Ord, PartialOrd, Eq)]
@@ -169,7 +173,7 @@ impl BI {
 impl PartialEq for BI {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
-        // Invariant: All possible strings are different and thus (ptr,len) must me different as well.
+        // Invariant: All possible strings are different and thus `(ptr,len)` must me different as well.
         // Invariant: No two strings at different pointers are equal,
         // Invariant: this is guaranteed due to the fact that it's not possible to create new.
         // Performance hack: Only check those.
@@ -180,11 +184,11 @@ impl PartialEq for BI {
 impl Hash for BI {
     #[inline]
     fn hash<H: Hasher>(&self, state: &mut H) {
-        // Invariant: All possible strings are different and thus (ptr,len) must me different as well.
+        // Invariant: All possible strings are different and thus `(ptr,len)` must me different as well.
         // Invariant: No two strings at different pointers are equal,
         // Invariant: this is guaranteed due to the fact that it's not possible to create new.
         // Performance hack: Only hash the ptr to the middle of the string.
-        (self.0.as_ptr() as usize + self.0.len() >> 1).hash(state)
+        (self.0.as_ptr() as usize + (self.0.len() >> 1)).hash(state);
     }
 }
 
@@ -218,22 +222,38 @@ impl IntoPropValue<ChildrenRenderer<VNode>> for BI {
 /// ```
 /// (That way it will be an error if a file is added/removed.)
 pub struct BIFiles {
+    /// Contents of the file `bootstrap-icons.css`.
     pub css: &'static str,
+    /// Contents of the file `fonts/bootstrap-icons.woff`.
     pub font_woff: &'static [u8],
+    /// Contents of the file `fonts/bootstrap-icons.woff2`.
     pub font_woff2: &'static [u8],
 }
 
 impl BIFiles {
+    /// Version of the package.
     pub const VERSION: &'static str = "v1.10.5";
 
+    /// Name of the package.
     pub const NAME: &'static str = "bootstrap-icons-v1.10.5";
 
+    /// All bootstrap-icons files.
+    ///
+    /// Intended use:
+    /// ```
+    /// # use yew_bootstrap_icons::BIFiles;
+    /// let BIFiles {css, font_woff, font_woff2} = BIFiles::FILES;
+    /// ```
+    /// (That way it will be an error if a file is added/removed.)
     pub const FILES: Self = Self {
         css: include_str!("../bootstrap-icons-v1.10.5/bootstrap-icons.css"),
         font_woff: include_bytes!("../bootstrap-icons-v1.10.5/fonts/bootstrap-icons.woff"),
         font_woff2: include_bytes!("../bootstrap-icons-v1.10.5/fonts/bootstrap-icons.woff2"),
     };
 
+    /// Load the bootstrap-icons files from the official cdn.
+    ///
+    /// Place `{BIFiles::cdn()}` to the top of the top level html! in your application.
     #[must_use]
     pub fn cdn() -> VNode {
         html! {
