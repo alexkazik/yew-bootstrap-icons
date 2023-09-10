@@ -228,11 +228,8 @@ impl BIFiles {
 
     pub const NAME: &'static str = "bootstrap-icons-v1.10.5";
 
-    pub const CSS_FILE: &'static str =
-        include_str!("../bootstrap-icons-v1.10.5/bootstrap-icons.css");
-
     pub const FILES: Self = Self {
-        css: Self::CSS_FILE,
+        css: include_str!("../bootstrap-icons-v1.10.5/bootstrap-icons.css"),
         font_woff: include_bytes!("../bootstrap-icons-v1.10.5/fonts/bootstrap-icons.woff"),
         font_woff2: include_bytes!("../bootstrap-icons-v1.10.5/fonts/bootstrap-icons.woff2"),
     };
