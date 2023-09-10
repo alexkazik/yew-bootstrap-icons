@@ -208,10 +208,26 @@ impl From<BI> for Html {
     }
 }
 
+impl From<&BI> for Html {
+    #[allow(clippy::inline_always)]
+    #[inline(always)]
+    fn from(value: &BI) -> Self {
+        Html::from(*value)
+    }
+}
+
 impl IntoPropValue<ChildrenRenderer<VNode>> for BI {
     #[inline]
     fn into_prop_value(self) -> ChildrenRenderer<VNode> {
         self.html().into_prop_value()
+    }
+}
+
+impl IntoPropValue<ChildrenRenderer<VNode>> for &BI {
+    #[allow(clippy::inline_always)]
+    #[inline(always)]
+    fn into_prop_value(self) -> ChildrenRenderer<VNode> {
+        (*self).into_prop_value()
     }
 }
 
