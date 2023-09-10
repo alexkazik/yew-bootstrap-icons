@@ -122,7 +122,7 @@
 use core::hash::{Hash, Hasher};
 use yew::html::{ChildrenRenderer, IntoPropValue};
 use yew::virtual_dom::{VNode, VRaw};
-use yew::{html, AttrValue, Html};
+use yew::{AttrValue, Html};
 
 /// Represents an bootstrap-icon.
 ///
@@ -255,15 +255,12 @@ impl BIFiles {
     ///
     /// Place `{BIFiles::cdn()}` to the top of the top level html! in your application.
     #[must_use]
-    pub fn cdn() -> VNode {
-        html! {
-            <link
-                rel="stylesheet"
-                href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-                crossorigin="anonymous"
-                integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
-            />
-        }
+    pub const fn cdn() -> VNode {
+        VNode::VRaw(VRaw {
+            html: AttrValue::Static(
+                r#"<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">"#,
+            ),
+        })
     }
 
     /// Copy all bootstrap icons files to the specified directory.
