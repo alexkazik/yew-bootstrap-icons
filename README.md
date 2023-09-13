@@ -19,32 +19,36 @@ html!{
 }
 ```
 
-## Files
+## Required CSS
 
-The files can be added though several ways:
+Using this crate, and Bootstrap icons, requires the inclusion of a CSS file from Bootstrap (`bootstrap-icons.css`). This file can be added by:
 
-* Copy them yourself from the website
-* Use `BIFiles::cdn()`
-* Use `BIFiles::copy()` - see below
-* Access the data via `BIFiles::FILES` and deliver them yourself
+* Copying it yourself from the Bootstrap website
+* Using `BIFiles::copy()` in build-executed code (see below)
+* Using `BIFiles::cdn()` (easiest)
+* Accessing the data via `BIFiles::FILES` and deliver them yourself
 
-## Automatically copy the files
+## Installation - Quickstart - Using CDN
 
-There are some options, two are explained below.
+0. Call `BIFiles::cdn()` inside the `html!{}` returned by your application
 
-0. Either way you now have to specify your wasm-program in `index.html`:
+## Installation - Automatically Copying Files
+
+This is not required if you take the `BIFiles::cdn()` or `BIFiles::FILES` approach.
+
+0. Specify your wasm-program in `index.html`:
    ```html
    <link data-trunk rel="rust" data-bin="name-of-app" />
    ```
-   (Because there are now two binaries and trunk can't decide.)
+   (since we'll be writing a build-executed program, there are now two binaries and trunk needs to know which is your WASM binary)
 
-1. Add a binary to your `Cargo.toml`
+1. Add the build-executed binary to your `Cargo.toml`
    ```toml
    [[bin]]
    name = "copy-bootstrap-icons"
    ```
 
-## Option 1: Copy to dist
+### Option 1: Copy to dist
 
 2. Create the file `src/bin/copy-bootstrap-icons.rs` with:
    ```rust
@@ -77,7 +81,7 @@ There are some options, two are explained below.
    command_arguments = ["run", "--bin", "copy-bootstrap-icons"]
    ```
 
-## Option 2: Copy to source (and let trunk copy it to dist)
+### Option 2: Copy to source (and let trunk copy it to dist)
 
 This means that trunk will add the hash to the css-file.
 
